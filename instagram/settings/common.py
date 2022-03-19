@@ -28,6 +28,10 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+ADMINS = [
+    ('JiYul SONG','lnacles@naver.com')
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -139,3 +143,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INTERNAL_IPS = ['127.0.0.1']
+
+# Email with send Grid
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = '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'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_POST = 587
+EMAIL_USE_TLS = True
+WELCOME_EMAIL_SENDER = "lnacels@naver.com"
