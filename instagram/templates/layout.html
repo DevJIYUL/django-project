@@ -39,8 +39,13 @@
                     </a>
                     <a class="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>
                     <a class="me-3 py-2 text-dark text-decoration-none" href="#">Support</a>
-                    <a class="me-3 py-2 text-dark text-decoration-none" href="#">
-                        Profile
+                    <a class="me-3 py-2 text-dark text-decoration-none" href="{% url 'profile_edit' %}">
+                        {% if user.avatar %}
+                            <img src="{{user.avatar.url}}" />
+                        {% else %}
+                            <img src =" {% url 'pydenticon_image' user.username %}" style='width:24px; height:24px;'>
+                        {% endif %}
+                        
                     </a>
                     </nav>
                 </div>
