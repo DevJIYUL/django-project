@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404,redirect,render
 from .form import PostForm
@@ -27,4 +28,14 @@ def post_detail(request,pk):
     post = get_object_or_404(Post,pk=pk)
     return render(request,"post/post_detail.html",{
         "post":post,
+    })
+
+def user_page(request,username):
+    page_user = get_object_or_404(get_user_model(), username= username, is_active=True)
+    post_list = Post.objects.filter(author=page_user)
+    post_list_count = post_list.count() # 실제 데이터베이스에 count쿼리를 던진다
+    # len(post_list) post_list를 메모리에 올린 후 메모리상 리스트 개수를 반환 post갯수가 많아지면 느려질수 있다.
+    return render(request,'post/user_page.html',{
+        "page_user":page_user,
+        "post_list":post_list,
     })
