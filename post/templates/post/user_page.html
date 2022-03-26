@@ -1,0 +1,32 @@
+{% extends 'post/layout.html' %}
+{% load thumbnail %}
+
+{% block content %}
+    <div class="container">
+        <div class="row pt-3 pb-5">
+            <div class="col-sm-3" style="text-align : center;">
+                <img src="{{ page_user.avatar_url }}" class="rounded-circle" style="width:160px;"/>
+            </div>
+            <div class="col-sm-9">
+                {{ page_user.username }}
+                <a href="{% url "profile_edit" %}" class="btn btn-secondary btn-sm">
+                    Edit Profile
+                </a>
+                <hr/>
+                0 post, 0 followers, 0 following
+                <hr/>
+                {{ page_user.username }}
+            </div>
+            <div class="row mt-3">
+                {% for post in post_list %}
+                    <div class="col-sm-4 mb-4">
+                        {% comment %} Tile design {% endcomment %}
+                        {% comment %} <img src="{{ post.photo.url }}" alt="{{ post.caption }}" style="width: 100%;"> {% endcomment %}
+                        {% comment %} thumbnail {% endcomment %}
+                        <img src="{% thumbnail post.photo 512x512 crop %}" alt="{{ post.caption }}" style="width: 100%;">
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock  %}

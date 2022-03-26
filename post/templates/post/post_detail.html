@@ -14,11 +14,9 @@
                     </div>
                     <div class="card-footer">
                         {% for tag in post.tag_set.all %}
-                            {% comment %} <span class="badge"> {% endcomment %}
                             <span class="badge rounded-pill bg-dark">
                                 #{{ tag.name }}
                             </span>
-                            {% comment %} </span> {% endcomment %}
                         {% endfor %}
                     </div>
                 </div>

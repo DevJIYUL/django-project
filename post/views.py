@@ -6,6 +6,12 @@ from .form import PostForm
 from .models import Post
 
 @login_required
+def index(request):
+    return render(request, "post/index.html", {
+
+    })
+
+@login_required
 def post_new(request):
     if request.method == 'POST':
         form = PostForm(request.POST,request.FILES)
