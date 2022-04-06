@@ -1,3 +1,5 @@
+{% load post_tags %}
+
 <div class="card">
     <div class="card-header">
         <img src ="{{ post.author.avatar_url}}" style="width:32px; height:32px">
@@ -7,12 +9,21 @@
     </div>
     <div class="card-body">
         <img src="{{ post.photo.url }}" style="width:100%;" />
-    </div>
-    <div class="card-footer">
         {% for tag in post.tag_set.all %}
             <span class="badge rounded-pill bg-dark">
                 #{{ tag.name }}
             </span>
         {% endfor %}
+    </div>
+    <div class="card-footer">
+        {% if post|is_like_user:user %}
+            <a href="{% url "post:post_unlike" post.pk %}" style="color : inherut;">
+                <i class="fas fa-skull"></i>
+            </a>
+        {% else %}
+            <a href="{% url "post:post_like" post.pk %}" style="color : inherut;">
+                <i class="fas fa-heart"></i>
+            </a>
+        {% endif %}
     </div>
 </div>

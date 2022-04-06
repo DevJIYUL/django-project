@@ -10,7 +10,7 @@ from .models import Post
 
 @login_required
 def index(request):
-    timesince = timezone.now - timedelta(days=3)
+    timesince = timezone.now() - timedelta(days=3)
     post_list = Post.objects.all()\
         .filter(
             Q(author= request.user)|
@@ -53,6 +53,21 @@ def post_detail(request,pk):
     return render(request,"post/post_detail.html",{
         "post":post,
     })
+@login_required
+def post_like(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    post.like_user_set.add(request.user)
+    messages.success(request,f"포스팅#{post.pk}를 좋아합니다.")
+    redirect_url = request.META.get("HTTP_REFERER","root")
+    return redirect(redirect_url)
+
+@login_required
+def post_unlike(request,pk):
+    post = get_object_or_404(Post,pk=pk)
+    post.like_user_set.remove(request.user)
+    messages.success(request,f"포스팅#{post.pk}좋아요를 취소합니다.")
+    redirect_url = request.META.get("HTTP_REFERER","root")
+    return redirect(redirect_url)
 
 def user_page(request,username):
     page_user = get_object_or_404(get_user_model(), username= username, is_active=True)
