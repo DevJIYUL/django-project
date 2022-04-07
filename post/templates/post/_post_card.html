@@ -1,4 +1,4 @@
-{% load post_tags %}
+{% load humanize post_tags %}
 
 <div class="card">
     <div class="card-header">
@@ -9,21 +9,41 @@
     </div>
     <div class="card-body">
         <img src="{{ post.photo.url }}" style="width:100%;" />
-        {% for tag in post.tag_set.all %}
-            <span class="badge rounded-pill bg-dark">
-                #{{ tag.name }}
-            </span>
-        {% endfor %}
+        <div>
+            {% if post|is_like_user:user %}
+                <a href="{% url "post:post_unlike" post.pk %}" style="color : inherut;">
+                    <i class="fas fa-heart"></i>
+                </a>
+                {% else %}
+                <a href="{% url "post:post_like" post.pk %}" style="color : inherut;">
+                    <i class="fas fa-skull"></i>
+                </a>
+            {% endif %}
+        </div>
+        <div class="comment-list">
+            {% for comment in post.comment_set.all %}
+            <div class="comment">
+                <strong>{{comment.author}}</strong>
+                {{comment.message}}
+                <small class="text-muted">{{comment.created_at|naturaltime}}</small>
+            </div>
+            {% endfor %}
+        <div>
+            {% for tag in post.tag_set.all %}
+                <span class="badge rounded-pill bg-dark">
+                    #{{ tag.name }}
+                </span>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="{{ post.get_absolute_url }}" style="" class = "text-muted">
+                <small>
+                    {{ post.created_at|naturaltime }}
+                </small>
+            </a>
+        </div>
     </div>
     <div class="card-footer">
-        {% if post|is_like_user:user %}
-            <a href="{% url "post:post_unlike" post.pk %}" style="color : inherut;">
-                <i class="fas fa-skull"></i>
-            </a>
-        {% else %}
-            <a href="{% url "post:post_like" post.pk %}" style="color : inherut;">
-                <i class="fas fa-heart"></i>
-            </a>
-        {% endif %}
+        <a href="{% url "post:comment_new" post.pk %}">댓글쓰기</a>
     </div>
 </div>
