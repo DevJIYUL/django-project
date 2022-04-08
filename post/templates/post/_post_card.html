@@ -1,4 +1,4 @@
-{% load humanize post_tags %}
+{% load bootstrap4 humanize post_tags %}
 
 <div class="card">
     <div class="card-header">
@@ -14,20 +14,23 @@
                 <a href="{% url "post:post_unlike" post.pk %}" style="color : inherut;">
                     <i class="fas fa-heart"></i>
                 </a>
-                {% else %}
+            {% else %}
                 <a href="{% url "post:post_like" post.pk %}" style="color : inherut;">
                     <i class="fas fa-skull"></i>
                 </a>
             {% endif %}
         </div>
+
         <div class="comment-list">
             {% for comment in post.comment_set.all %}
-            <div class="comment">
-                <strong>{{comment.author}}</strong>
-                {{comment.message}}
-                <small class="text-muted">{{comment.created_at|naturaltime}}</small>
-            </div>
+                <div class="comment">
+                    <strong>{{comment.author}}</strong>
+                    {{comment.message}}
+                    <small class="text-muted">{{comment.created_at|naturaltime}}</small>
+                </div>
             {% endfor %}
+        </div>
+
         <div>
             {% for tag in post.tag_set.all %}
                 <span class="badge rounded-pill bg-dark">
@@ -35,6 +38,7 @@
                 </span>
             {% endfor %}
         </div>
+
         <div>
             <a href="{{ post.get_absolute_url }}" style="" class = "text-muted">
                 <small>
@@ -42,8 +46,13 @@
                 </small>
             </a>
         </div>
+        
     </div>
     <div class="card-footer">
-        <a href="{% url "post:comment_new" post.pk %}">댓글쓰기</a>
+        <form action="{% url "post:comment_new" post.pk%}" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form comment_form %}
+            <input type="submit" value="댓글쓰기" class ="btn btn-primary"/>
+        </form>
     </div>
 </div>
