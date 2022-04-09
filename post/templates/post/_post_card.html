@@ -21,13 +21,9 @@
             {% endif %}
         </div>
 
-        <div class="comment-list">
+        <div id="post-{{ post.pk }}-comment-list" class="comment-list mt-3 mb-3">
             {% for comment in post.comment_set.all %}
-                <div class="comment">
-                    <strong>{{comment.author}}</strong>
-                    {{comment.message}}
-                    <small class="text-muted">{{comment.created_at|naturaltime}}</small>
-                </div>
+                {% include "post/_comment.html" %}
             {% endfor %}
         </div>
 
@@ -49,10 +45,35 @@
         
     </div>
     <div class="card-footer">
-        <form action="{% url "post:comment_new" post.pk%}" method="POST">
+        <form id="post-{{ post.pk }}-comment-form" action="{% url "post:comment_new" post.pk%}" method="POST">
             {% csrf_token %}
             {% bootstrap_form comment_form %}
             <input type="submit" value="댓글쓰기" class ="btn btn-primary"/>
         </form>
+        <div id="server-response-{{ post.pk }}"></div>
+        <script>
+        $(function(){
+            var form_id = "post-{{ post.pk }}-comment-form";
+            $("#" + form_id).submit(function(e){
+                {% comment %} 이벤트가 발생되면 이곳에서 멈춘다. {% endcomment %}
+                e.preventDefault();
+                
+                var options = {
+                    success: function(responseText, statusText,xhr,$form){
+                        console.group("");
+                        console.log(responseText);
+                        console.log(statusText);
+                        console.log(xhr);
+                        console.log($form);
+                        console.groupEnd();
+
+                        $("#post-{{ post.pk }}-comment-list").prepend(responseText)
+                    }
+                }
+
+                $(this).ajaxSubmit(options)
+            })
+        });
+        </script>
     </div>
 </div>

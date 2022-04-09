@@ -10,7 +10,7 @@ from .models import Post
 
 @login_required
 def index(request):
-    timesince = timezone.now() - timedelta(days=3)
+    timesince = timezone.now() - timedelta(days=12)
     post_list = Post.objects.all()\
         .filter(
             Q(author= request.user)|
@@ -84,6 +84,12 @@ def comment_new(request,post_pk):
             comment.post = post
             comment.author = request.user
             comment.save()
+            if request.is_ajax():
+                
+                return render(request,"post/_comment.html",{
+                    "comment": comment,
+                })
+                pass
             return redirect(comment.post)
     else:
         form = CommentForm()
